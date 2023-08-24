@@ -1,15 +1,15 @@
 package com.example.examenfinale2023prog2.repository;
 
-
 import com.example.examenfinale2023prog2.entity.CategorieEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class CategorieDAO implements CategorieRepository {
@@ -95,8 +95,9 @@ public class CategorieDAO implements CategorieRepository {
     }
 
     @Override
-    public void deleteCategorie(Long id) throws SQLException {
+    public ResponseEntity<Map<String, String>> deleteCategorie(Long id) throws SQLException {
         String query = "DELETE FROM categorie WHERE idCategorie = ?";
+        Map<String, String> responseMap = new HashMap<>();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setLong(1, id);
@@ -104,9 +105,14 @@ public class CategorieDAO implements CategorieRepository {
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Deleting category failed, no rows affected.");
+            } else {
+                String message = "La catégorie a été supprimée avec succès.";
+                responseMap.put("message", message);
+                return ResponseEntity.ok().body(responseMap);
             }
         }
     }
+
 
 
     private CategorieEntity convertToCategorie(ResultSet resultSet) throws SQLException {

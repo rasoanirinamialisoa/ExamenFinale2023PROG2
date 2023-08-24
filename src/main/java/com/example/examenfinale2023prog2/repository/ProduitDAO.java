@@ -1,7 +1,5 @@
 package com.example.examenfinale2023prog2.repository;
 
-
-
 import com.example.examenfinale2023prog2.entity.ProduitEntity;
 import org.springframework.stereotype.Repository;
 
@@ -123,9 +121,6 @@ public class ProduitDAO implements ProduitRepository {
             }
         }
     }
-
-
-
 
     private ProduitEntity convertToProduit(ResultSet resultSet) throws SQLException {
         ProduitEntity produit = new ProduitEntity();

@@ -22,6 +22,7 @@ public class DatabaseConnection {
 
     @Bean
     public Connection connection() throws SQLException {
+        System.out.println("DB URL: " + dbUrl);
         Connection connection = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
         System.out.println("Connexion à la base de données réussie !");
         return connection;

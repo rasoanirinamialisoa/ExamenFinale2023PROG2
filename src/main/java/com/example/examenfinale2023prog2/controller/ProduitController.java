@@ -24,6 +24,7 @@ public class ProduitController {
         return produitService.getProduitById(id);
     }
 
+
     @PostMapping
     public ProduitEntity createProduit(@RequestBody ProduitEntity produit) {
         return produitService.createProduit(produit);
