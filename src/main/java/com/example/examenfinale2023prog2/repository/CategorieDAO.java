@@ -13,7 +13,6 @@ import java.util.*;
 
 @Repository
 public class CategorieDAO implements CategorieRepository {
-
     private final Connection connection;
 
     public CategorieDAO(Connection connection) {

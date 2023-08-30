@@ -136,5 +136,4 @@ public class ProduitDAO implements ProduitRepository {
         return produit;
     }
 
-    // Autres méthodes pour les conversions et opérations CRUD...
 }

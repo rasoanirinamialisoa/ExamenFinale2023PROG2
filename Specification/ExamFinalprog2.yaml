@@ -1,0 +1,669 @@
+openapi: 3.0.0
+info:
+  title: API de Gestion de stock d'une société.
+  description: API pour gérer les produits, les catégories, les fournisseurs, les commandes, etc.
+  version: 1.0.0
+tags:
+  - name: produits
+    description: Opérations liées aux produits
+  - name: categories
+    description: Opérations liées aux catégories
+  - name: commandes
+    description: Opérations liées aux commandes
+  - name: fournisseurs
+    description: Opérations liées aux fournisseurs
+  - name: livraisons
+    description: Opérations liées aux livraisons
+  - name: details-commande
+    description: Opérations liées aux détails de commande
+paths:
+  /produits:
+      get:
+        tags:
+          - produits
+        summary: Récupérer tous les produits
+        responses:
+          '200':
+            description: Liste de tous les produits
+            content:
+              application/json:
+                example:
+                  - idProduit: 1
+                    nomProduit: "Clé"
+                    description: "Serrure d'une porte"
+                    prixUnitaire: 29.99
+                    quantiteEnStock: 100
+                    dateAjout: "2023-08-24"
+                    dateMiseAJour: "2023-08-24"
+                    idCategorie: 1
+                    idFournisseur: 1
+
+      post:
+        tags:
+          - produits
+        summary: Créer un produit
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produit'
+        responses:
+          '201':
+            description: Produit créé avec succès
+            content:
+              application/json:
+                example:
+                  idProduit: 2
+                  message: "Le produit a été créé avec succès."
+
+  /produits/{id}:
+      get:
+        tags:
+          - produits
+        summary: Récupérer un produit par ID
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+            description: ID du produit
+        responses:
+          '200':
+            description: Détails du produit
+            content:
+              application/json:
+                example:
+                  idProduit: 1
+                  nomProduit: "Clé"
+                  description: "Serrure d'une porte"
+                  prixUnitaire: 29.99
+                  quantiteEnStock: 100
+                  dateAjout: "2023-08-24"
+                  dateMiseAJour: "2023-08-24"
+                  idCategorie: 1
+                  idFournisseur: 1
+
+      put:
+        tags:
+          - produits
+        summary: Mettre à jour un produit par ID
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+            description: ID du produit
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produit'
+        responses:
+          '200':
+            description: Produit mis à jour avec succès
+            content:
+              application/json:
+                example:
+                  idProduit: 1
+                  message: "Le produit a été mis à jour avec succès."
+
+      delete:
+        tags:
+          - produits
+        summary: Supprimer un produit par ID
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+            description: ID du produit
+        responses:
+          '200':
+            description: Produit supprimé avec succès
+            content:
+              application/json:
+                example:
+                  message: "Le produit a été supprimé avec succès."
+
+  /categories:
+    get:
+      tags:
+        - categories
+      summary: Récupérer toutes les catégories
+      responses:
+        '200':
+          description: Liste de toutes les catégories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Categorie'
+
+    post:
+      tags:
+        - categories
+      summary: Créer une nouvelle catégorie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Categorie'
+      responses:
+        '201':
+          description: Catégorie créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categorie'
+
+  /categories/{id}:
+      get:
+        tags:
+          - categories
+        summary: Récupérer une catégorie par son ID
+        parameters:
+          - name: id
+            in: path
+            required: true
+            description: ID de la catégorie
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: Catégorie trouvée
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Categorie'
+          '404':
+            description: Catégorie non trouvée
+
+      put:
+        tags:
+          - categories
+        summary: Mettre à jour une catégorie existante
+        parameters:
+          - name: id
+            in: path
+            required: true
+            description: ID de la catégorie à mettre à jour
+            schema:
+              type: integer
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categorie'
+        responses:
+          '200':
+            description: Catégorie mise à jour avec succès
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Categorie'
+          '404':
+            description: Catégorie non trouvée
+
+      delete:
+        tags:
+          - categories
+        summary: Supprimer une catégorie par son ID
+        parameters:
+          - name: id
+            in: path
+            required: true
+            description: ID de la catégorie à supprimer
+            schema:
+              type: integer
+        responses:
+          '204':
+            description: Catégorie supprimée avec succès
+          '404':
+            description: Catégorie non trouvée
+
+  /fournisseurs:
+    get:
+      tags:
+        - fournisseurs
+      summary: Récupérer tous les fournisseurs
+      responses:
+        '200':
+          description: Liste de fournisseurs récupérée avec succès
+          content:
+            application/json:
+              example: [ ]
+
+    post:
+      tags:
+        - fournisseurs
+      summary: Créer un nouveau fournisseur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fournisseur'
+      responses:
+        '201':
+          description: Fournisseur créé avec succès
+          content:
+            application/json:
+              example: { }
+
+  /fournisseurs/{id}:
+      get:
+        tags:
+          - fournisseurs
+        summary: Récupérer un fournisseur par ID
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: Fournisseur récupéré avec succès
+            content:
+              application/json:
+                example: { }
+
+      put:
+        tags:
+          - fournisseurs
+        summary: Mettre à jour un fournisseur par ID
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fournisseur'
+        responses:
+          '200':
+            description: Fournisseur mis à jour avec succès
+            content:
+              application/json:
+                example: { }
+
+      delete:
+        tags:
+          - fournisseurs
+        summary: Supprimer un fournisseur par ID
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '204':
+            description: Fournisseur supprimé avec succès
+
+  /livraisons:
+    get:
+      tags:
+        - livraisons
+      summary: Récupérer toutes les livraisons
+      responses:
+        '200':
+          description: Liste de livraisons récupérée avec succès
+          content:
+            application/json:
+              example: [ ]
+
+    post:
+      tags:
+        - livraisons
+      summary: Créer une nouvelle livraison
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Livraison'
+      responses:
+        '201':
+          description: Livraison créée avec succès
+          content:
+            application/json:
+              example: { }
+
+  /livraisons/{id}:
+      get:
+        tags:
+          - livraisons
+        summary: Récupérer une livraison par ID
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: Livraison récupérée avec succès
+            content:
+              application/json:
+                example: { }
+
+      put:
+        tags:
+          - livraisons
+        summary: Mettre à jour une livraison par ID
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Livraison'
+        responses:
+          '200':
+            description: Livraison mise à jour avec succès
+            content:
+              application/json:
+                example: { }
+
+      delete:
+        tags:
+          - livraisons
+        summary: Supprimer une livraison par ID
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '204':
+            description: Livraison supprimée avec succès
+
+  /commandes:
+    get:
+      tags:
+        - commandes
+      summary: Récupérer toutes les commandes
+      responses:
+        '200':
+          description: Liste de toutes les commandes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Commande'
+
+    post:
+      tags:
+        - commandes
+      summary: Créer une nouvelle commande
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Commande'
+      responses:
+        '201':
+          description: Commande créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Commande'
+
+  /commandes/{id}:
+      get:
+        tags:
+          - commandes
+        summary: Récupérer une commande par son ID
+        parameters:
+          - name: id
+            in: path
+            required: true
+            description: ID de la commande
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: Commande trouvée
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Commande'
+          '404':
+            description: Commande non trouvée
+
+      put:
+        tags:
+          - commandes
+        summary: Mettre à jour une commande existante
+        parameters:
+          - name: id
+            in: path
+            required: true
+            description: ID de la commande à mettre à jour
+            schema:
+              type: integer
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Commande'
+        responses:
+          '200':
+            description: Commande mise à jour avec succès
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Commande'
+          '404':
+            description: Commande non trouvée
+
+      delete:
+        tags:
+          - commandes
+        summary: Supprimer une commande par son ID
+        parameters:
+          - name: id
+            in: path
+            required: true
+            description: ID de la commande à supprimer
+            schema:
+              type: integer
+        responses:
+          '204':
+            description: Commande supprimée avec succès
+          '404':
+            description: Commande non trouvée
+
+  /details-commande:
+    get:
+      tags:
+        - details-commande
+      summary: Récupérer tous les détails de commande
+      responses:
+        '200':
+          description: Liste de détails de commande récupérée avec succès
+          content:
+            application/json:
+              example: [ ]
+
+    post:
+      tags:
+        - details-commande
+      summary: Créer un nouveau détail de commande
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetailDeLaCommande'
+      responses:
+        '201':
+          description: Détail de commande créé avec succès
+          content:
+            application/json:
+              example: { }
+
+  /details-commande/{id}:
+      get:
+        tags:
+          - details-commande
+        summary: Récupérer un détail de commande par ID
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: Détail de commande récupéré avec succès
+            content:
+              application/json:
+                example: { }
+
+      put:
+        tags:
+          - details-commande
+        summary: Mettre à jour un détail de commande par ID
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailDeLaCommande'
+        responses:
+          '200':
+            description: Détail de commande mis à jour avec succès
+            content:
+              application/json:
+                example: { }
+
+      delete:
+        tags:
+          - details-commande
+        summary: Supprimer un détail de commande par ID
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '204':
+            description: Détail de commande supprimé avec succès
+
+components:
+  schemas:
+    Produit:
+      type: object
+      properties:
+        idProduit:
+          type: integer
+        nomProduit:
+          type: string
+        description:
+          type: string
+        prixUnitaire:
+          type: number
+        quantiteEnStock:
+          type: integer
+        dateAjout:
+          type: string
+          format: date
+        dateMiseAJour:
+          type: string
+          format: date
+        idCategorie:
+          type: integer
+        idFournisseur:
+          type: integer
+    Categorie:
+      type: object
+      properties:
+        idCategorie:
+          type: integer
+        nomCategorie:
+          type: string
+        descriptionCategorie:
+          type: string
+      required:
+        - nomCategorie
+        - descriptionCategorie
+    Commande:
+      type: object
+      properties:
+        idCommande:
+          type: integer
+        dateDeCommande:
+          type: string
+          format: date
+        statusDeLaCommande:
+            type: boolean
+        montantDeLaCommande:
+            type: number
+    Fournisseur:
+      type: object
+      properties:
+            idFournisseur:
+              type: integer
+            nomFournisseur:
+              type: string
+            adreseFournisseur:
+              type: string
+            telephone:
+              type: string
+            email:
+              type: string
+    Livraison:
+      type: object
+      properties:
+        idLivraison:
+          type: integer
+        dateLivraison:
+          type: string
+          format: date
+        statutLivraison:
+          type: boolean
+        idCommande:
+          type: integer
+    DetailDeLaCommande:
+      type: object
+      properties:
+        idDetailDeLaCommande:
+          type: integer
+        quantiteCommande:
+          type: integer
+        idProduit:
+          type: integer
+        idCommande:
+          type: integer
+
+
